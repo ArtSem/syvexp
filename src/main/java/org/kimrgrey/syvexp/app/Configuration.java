@@ -62,4 +62,8 @@ public final class Configuration {
 	public String getTemplateExtension() {
 		return templateExtension;
 	}
+
+	public TemplateManager createTemplateManager() throws InvalidConfigException {
+		return new TemplateManager(templateDirectory, templateExtension);
+	}
 }

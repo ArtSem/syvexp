@@ -42,7 +42,7 @@ public final class Application {
 
 	private void printUsage(Options options) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp( "exporession-server", options);
+        formatter.printHelp( "syvexp", options);
     }
 
 	public void execute() {
@@ -51,6 +51,7 @@ public final class Application {
         }
         try {
             Configuration configuration = Configuration.load(commandLine.getOptionValue("config"));
+            TemplateManager templateManager = configuration.createTemplateManager();
         } catch (InvalidConfigException exception) {
             logger.error("Failed to export data because of configuration error", exception);
         }

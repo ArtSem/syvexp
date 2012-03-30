@@ -1,6 +1,6 @@
 package org.kimrgrey.syvexp.app;
 
-
+import java.util.Properties;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -13,38 +13,32 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
+import org.apache.velocity.app.Velocity;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TemplateManager {
     private static final Logger logger = LoggerFactory.getLogger(TemplateManager.class);
     private Map<String, Template> templates = new HashMap<String, Template>();
-
-    public TemplateManager(final String dirName, final String extension) {
+    
+    public TemplateManager(final String dirName, final String extension) throws InvalidConfigException {
         File templateDirectory = new File(dirName);
-        File[] templateFiles = templateDirectory.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(extension);
-            }
-        });
-        for (File templateFile : templateFiles) {
-            try {
-                Template template = loadTemplate(dirName + File.separator + templateFile.getName());
-                if (template != null) {
-                    templates.put(templateFile.getName(), template);
-                }
-            } catch (InvalidConfigException exception) {
-                logger.warn("Failed to load some tempalte", exception);
-            }
+        if (!templateDirectory.isDirectory()) {
+            throw new InvalidConfigException("Failed to load templates because " + dirName + " is not directory");
         }
+        Properties properties = new Properties();
+        properties.setProperty("resource.loader", "file");
+        properties.setProperty("file.resource.loader.description", "Velocity File Resource Loader");
+        properties.setProperty("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader");
+        properties.setProperty("file.resource.loader.cache", "true");
+        properties.setProperty("file.resource.loader.modificationCheckInterval ", "0");
+        properties.setProperty("file.resource.loader.path", dirName);
+        Velocity.init(properties);
     }
 
-    public Template getTemplate(String templateName) {
-        return templates.get(templateName);
-    }
-
-    private Template loadTemplate(String templateName) throws InvalidConfigException {
+    public Template getTemplate(String templateName) throws InvalidConfigException {
+        logger.debug("Load template from file " + templateName);
         try {
             Template template = Velocity.getTemplate(templateName);
             return template;
