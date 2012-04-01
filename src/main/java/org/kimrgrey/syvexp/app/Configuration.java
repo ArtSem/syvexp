@@ -43,6 +43,7 @@ public final class Configuration {
 
 	private String templateDirectory = null;
 	private String templateExtension = null;
+	private String exporterClass = null;
 
 	public Configuration() {
 	}
@@ -65,5 +66,13 @@ public final class Configuration {
 
 	public TemplateManager createTemplateManager() throws InvalidConfigException {
 		return new TemplateManager(templateDirectory, templateExtension);
+	}
+
+	public void setExporterClass(String exporterClass) {
+		this.exporterClass = exporterClass;
+	}
+
+	public String getExporterClass() {
+		return exporterClass;
 	}
 }

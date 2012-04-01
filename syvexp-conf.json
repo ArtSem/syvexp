@@ -1,4 +1,4 @@
 {
-	"templateDirectory" : "D:\\data\\Development\\maven\\syvexp\\templates",
+	"templateDirectory" : "./templates/",
 	"templateExtension" : ".template"
 }
