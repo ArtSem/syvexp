@@ -21,8 +21,6 @@ import java.sql.ResultSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.jms.ConnectionFactory;
-
 public final class Application {
     private static final String DEFAULT_CONFIG_FILENAME = "syvexp-conf.json";
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
