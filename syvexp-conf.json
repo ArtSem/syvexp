@@ -9,7 +9,11 @@
 	"tables" : [
 		{
 			"tableName" : "jos_rab_vacansys",
-			"columns" : ["id", "company_id"]
+			"columns" : ["id", "company_id", "job_name", "job_description"]
+		},
+		{
+			"tableName" : "jos_rab_companys",
+			"columns" : ["id", "name", "about"]
 		}
 	]
 }
