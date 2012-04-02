@@ -3,17 +3,13 @@
 	"templateExtension" : ".template",
 	"templateName" : "simple.template",
 	"jdbcDriver" : "org.h2.Driver",
-	"jdbcUrl" : "jdbc:h2:mem:/rct/src",
+	"jdbcUrl" : "jdbc:h2:/rct/src",
 	"jdbcUser" : "test",
-	"jdbcPassword" : "test123",
+	"jdbcPassword" : "123",
 	"tables" : [
 		{
 			"tableName" : "jos_rab_vacansys",
 			"columns" : ["id", "company_id", "job_name", "job_description"]
-		},
-		{
-			"tableName" : "jos_rab_companys",
-			"columns" : ["id", "name", "about"]
 		}
 	]
 }
