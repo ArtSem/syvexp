@@ -10,15 +10,17 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
-import org.apache.velocity.Template;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jms.ConnectionFactory;
 
 public final class Application {
+    private static final String DEFAULT_CONFIG_FILENAME = "syvexp-conf.json";
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
-
 
 	public static void main (String... args) {
 		Application application = new Application(args);
@@ -31,7 +33,6 @@ public final class Application {
 		Options options = new Options();
         options.addOption("h", "help", false, "Display message that describes parameters for the application");
         options.addOption("c", "config", true, "Path to configuration file for the application");
-        options.addOption("t", "template", true, "Velocity template that will be used to generate messages");
         CommandLineParser parser = new PosixParser();
         try {
             this.commandLine = parser.parse(options, args);
@@ -54,19 +55,28 @@ public final class Application {
 		if (commandLine == null) {
             return;
         }
+        String configFileName = DEFAULT_CONFIG_FILENAME;
+        if (commandLine.hasOption("config")) {
+            configFileName = commandLine.getOptionValue("config");
+        }
+        Configuration configuration = null;
+        Connection connection = null;
+        Exporter exporter = null;
         try {
-            Configuration configuration = Configuration.load(commandLine.getOptionValue("config"));
-            Template template = configuration.createTemplateManager().getTemplate(commandLine.getOptionValue("template"));
-            VelocityExporter exporter = new VelocityExporter(template);
-            HashMap<String, String> row = new HashMap<String, String>();
-            row.put("column#1", "value#1");
-            row.put("column#2", "value#2");
-            row.put("column#3", "value#3");
-            exporter.export(row);
+            configuration = Configuration.load(configFileName);
+            exporter = configuration.createExporter();
+            connection = configuration.createDatabaseConnection();
+            // TODO Выполнить запрос к базе данных и экспортировать каждую строчку результата
         } catch (InvalidConfigException exception) {
             logger.error("Failed to export data because of configuration error", exception);
-        } catch (ExportException exception) {
-            logger.error("Failed to export data because of template error", exception);
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException exception) {
+                logger.warn("Failed to close database connection", exception);
+            }
         }
 	}
 }
