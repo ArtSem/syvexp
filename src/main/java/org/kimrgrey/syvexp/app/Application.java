@@ -1,5 +1,6 @@
 package org.kimrgrey.syvexp.app;
 
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,6 +14,9 @@ import org.apache.commons.cli.PosixParser;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +74,22 @@ public final class Application {
             List<Table> tableList = configuration.getTableList();
             for (Table table : tableList) {
                 logger.info("Start extraction of table by name {}", table.getTableName());
+                try {
+                    PreparedStatement statement = connection.prepareStatement(table.getQueryText());
+                    ResultSet rows = statement.executeQuery();
+                    List<String> columns = table.getColumnList();
+                    while (rows.next()) {
+                        Map<String, String> data = new HashMap<String, String>();
+                        for (String column: columns) {
+                            data.put(column, rows.getString(column));
+                        }
+                        exporter.export(data);
+                    }
+                } catch (SQLException exception) {
+                    logger.error("Failed to export row from table {}", table.getTableName(), exception); 
+                } catch (ExportException exception) {
+                    logger.error("Failed to export row from table {}", table.getTableName(), exception); 
+                }
             }
         } catch (InvalidConfigException exception) {
             logger.error("Failed to export data because of configuration error", exception);

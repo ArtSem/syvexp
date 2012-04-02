@@ -24,4 +24,12 @@ public class Table {
 	public String toString() {
 		return tableName + " " + columns.toString();
 	}
+
+	public String getQueryText() {
+		StringBuilder result = new StringBuilder("SELECT ");
+		for (String column : columns) {
+        	result.append(column).append( ",");  
+        }     
+		return result.substring(0, result.length() - 1) + " FROM " + tableName + ";";
+	}
 }
