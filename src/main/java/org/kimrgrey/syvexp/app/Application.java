@@ -1,6 +1,7 @@
 package org.kimrgrey.syvexp.app;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -66,7 +67,10 @@ public final class Application {
             configuration = Configuration.load(configFileName);
             exporter = configuration.createExporter();
             connection = configuration.createDatabaseConnection();
-            // TODO Выполнить запрос к базе данных и экспортировать каждую строчку результата
+            List<Table> tableList = configuration.getTableList();
+            for (Table table : tableList) {
+                logger.info("Start extraction of table by name {}", table.getTableName());
+            }
         } catch (InvalidConfigException exception) {
             logger.error("Failed to export data because of configuration error", exception);
         } finally {

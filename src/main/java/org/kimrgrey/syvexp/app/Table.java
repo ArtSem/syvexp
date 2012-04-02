@@ -17,7 +17,7 @@ public class Table {
 		this.tableName = tableName;
 	}
 
-	public List<String> getColumnsList() {
+	public List<String> getColumnList() {
 		return columns;
 	}
 
