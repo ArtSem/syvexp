@@ -6,7 +6,9 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 
 import java.io.StringWriter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -31,12 +33,13 @@ public class VelocityExporter implements Exporter {
 	}
 
     public void save(String xml) {
-    	FileWriter writer = null;
+    	BufferedWriter writer = null;
     	String fileName = java.util.UUID.randomUUID().toString();
         try {
-            writer = new FileWriter(fileName);
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
             writer.write(xml);
             writer.flush();
+            writer.close();
         } catch (IOException exception) {
             logger.error("Unable to create output file " + fileName, exception);
         } finally {
