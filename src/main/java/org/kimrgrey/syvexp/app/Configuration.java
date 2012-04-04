@@ -95,7 +95,7 @@ public final class Configuration {
 	}
 
 	public Exporter createExporter() throws InvalidConfigException {
-		return new VelocityExporter(createTemplateManager().getTemplate(templateName));
+		return new UrlExporter("http://localhost/test");
 	}
 
 	public Connection createDatabaseConnection() throws InvalidConfigException {

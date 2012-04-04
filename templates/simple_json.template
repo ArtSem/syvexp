@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{"row" : [
+		#set($columnNames = $data.keySet())
+	#foreach($columnName in $columnNames)
+    	"column" : {
+    				"name" : "$columnName", "data" : $data.get($columnName)
+    				}, 
+	#end
+		]
+}
