@@ -37,8 +37,9 @@ public class UrlExporter implements Exporter {
 
 	public void export(Map<String, String> row) throws  ExportException {
         String json = new Gson().toJson(row);
+        logger.debug("Export another yet row {}", json);
         try {
-            URLConnection uc = this.url.openConnection();
+            URLConnection uc = url.openConnection();
             uc.setDoInput(true);
             uc.setDoOutput(true);
             uc.setUseCaches(false);
