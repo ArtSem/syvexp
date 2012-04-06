@@ -62,6 +62,7 @@ public final class Configuration {
 	private String jdbcUser = null;
 	private String jdbcPassword = null;
 	private List<Table> tables = null;
+	private List<ExporterConfig> configs = null;
 
 	public Configuration() {
 	}
@@ -95,7 +96,11 @@ public final class Configuration {
 	}
 
 	public Exporter createExporter() throws InvalidConfigException {
-		return new UrlExporter("http://localhost/test");
+		CompositeExporter compositeExporter = new CompositeExporter();
+		for (ExporterConfig config : configs) {
+			compositeExporter.addExporter(config.createInstance());
+		}
+		return compositeExporter;
 	}
 
 	public Connection createDatabaseConnection() throws InvalidConfigException {

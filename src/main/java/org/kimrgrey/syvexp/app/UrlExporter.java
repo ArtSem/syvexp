@@ -26,6 +26,10 @@ public class UrlExporter implements Exporter {
 
     private URL url = null;
 	
+    public UrlExporter() {
+
+    }
+
     public UrlExporter(String url) throws InvalidConfigException {
         try {
             this.url = new URL(url);
@@ -37,7 +41,6 @@ public class UrlExporter implements Exporter {
 
 	public void export(Map<String, String> row) throws  ExportException {
         String json = new Gson().toJson(row);
-        logger.debug("Export another yet row {}", json);
         try {
             URLConnection uc = url.openConnection();
             uc.setDoInput(true);

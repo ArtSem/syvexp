@@ -1,7 +1,11 @@
 {
-	"templateDirectory" : "./templates/",
-	"templateExtension" : ".template",
-	"templateName" : "simple.template",
+	"configs" : [
+		
+		{
+			"className" : "org.kimrgrey.syvexp.app.UrlExporter",
+			"configFile" : "config/url-config.json"
+		}
+	],
 	"jdbcDriver" : "org.h2.Driver",
 	"jdbcUrl" : "jdbc:h2:/rct/src",
 	"jdbcUser" : "test",
